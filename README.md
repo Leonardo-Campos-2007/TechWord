@@ -1,17 +1,4 @@
 # TechWord
-# Relatório do Projeto
-## Plataforma de Hackathons e Eventos de Tecnologia
-
-**Data:** Agosto de 2026  
-**Versão:** 1.0
-
----
-
-## Sumário Executivo
-
-Este relatório apresenta uma visão geral do projeto de uma plataforma digital inovadora focada em hackathons e eventos de tecnologia. A solução proposta visa conectar participantes, empresas organizadoras e a comunidade tech de forma integrada e eficiente.
-
----
 
 ## 1. Introdução
 
@@ -161,4 +148,3 @@ Com a combinação correta de produto, mercado e modelo de negócio, esta startu
 
 ---
 
-**Documento preparado em Agosto de 2026**
