@@ -25,9 +25,6 @@ Uma plataforma SaaS (Software as a Service) que centraliza a experiência de hac
 
 ### 2.2 Principais Características
 
-**Sistema de Perfis de Usuários**
-- Participantes criam perfis com portfólio, habilidades, experiência e interesse em eventos
-
 **Páginas de Eventos**
 - Empresas criam páginas detalhadas de seus hackathons e eventos, com informações sobre temas, prêmios, cronograma e inscrições
 
@@ -53,7 +50,6 @@ Criar uma plataforma centralizada que consolide a experiência completa de hacka
 - Oferecer uma experiência amigável para participantes descobrirem e se inscreverem em eventos de tecnologia
 - Proporcionar às empresas ferramentas poderosas para organizar, gerenciar e divulgar seus hackathons e eventos
 - Criar um sistema de acompanhamento transparente das etapas de hackathons para todos os envolvidos
-- Integrar funcionalidades de rede social para fomentar networking entre participantes
 - Democratizar o acesso a oportunidades de eventos tech em todo o Brasil (com potencial global)
 - Validar um modelo de negócio sustentável que beneficie todos os stakeholders
 
@@ -63,9 +59,6 @@ Criar uma plataforma centralizada que consolide a experiência completa de hacka
 
 ### 4.1 Para Participantes (Usuários)
 
-**Criação e Gestão de Perfil**
-- Cadastro com informações pessoais, skills técnicas, portfolio, experiência profissional
-
 **Descoberta de Eventos**
 - Feed com filtros por tipo de evento, tecnologia, localização, datas
 
@@ -74,9 +67,6 @@ Criar uma plataforma centralizada que consolide a experiência completa de hacka
 
 **Acompanhamento de Etapas**
 - Dashboard personalizado mostrando status do hackathon (inscrição, submissão, avaliação, resultados)
-
-**Networking e Comunidade**
-- Chat com outros participantes, quadro de busca de times, comentários em eventos
 
 ### 4.2 Para Empresas (Organizadores)
 
@@ -103,9 +93,6 @@ Criar uma plataforma centralizada que consolide a experiência completa de hacka
 **Sistema de Certificados**
 - Geração de certificados digitais para participantes e vencedores
 
-**Integrações**
-- Discord, Slack, GitHub para facilitar comunicação e submissões de projetos
-
 **Busca e Filtros**
 - Busca avançada por tipo, tema, localização, data, nível de dificuldade
 
@@ -127,16 +114,6 @@ Criar uma plataforma centralizada que consolide a experiência completa de hacka
 - Integração com ferramentas de desenvolvimento populares
 - Analytics detalhado para organizadores
 - Comunidade vibrante de makers e developers
-
----
-
-## 7. Próximas Etapas
-
-- Validação de mercado e entrevistas com stakeholders
-- Desenvolvimento do MVP (Produto Mínimo Viável)
-- Beta testing com primeiros usuários e organizadores
-- Refinamento baseado em feedback
-- Lançamento público e estratégia de go-to-market
 
 ---
 
