@@ -1,211 +1,2110 @@
-# REQUISITOS
+# ARQUITETURA
 
-## 1. Requisitos Funcionais
+## 1. Objetivo do Documento
 
-### Usuários
+Este documento descreve a arquitetura inicial da plataforma de eventos e hackathons de tecnologia.
 
-**RF-001** — O sistema deve permitir o cadastro de usuários.
+O objetivo é definir:
 
-**RF-002** — O sistema deve permitir autenticação de usuários.
+* organização geral da aplicação;
+* responsabilidades das camadas;
+* fluxo das requisições;
+* divisão dos módulos;
+* comunicação entre componentes;
+* organização do backend;
+* organização do frontend;
+* estratégia inicial de persistência;
+* limites entre responsabilidades;
+* estratégia de evolução do projeto.
 
-**RF-003** — O sistema deve permitir consulta de perfil público.
+Este documento não define os endpoints individualmente.
 
-**RF-004** — O sistema deve permitir edição do próprio perfil.
+Os endpoints serão documentados em `API.md`.
 
-**RF-005** — O usuário deve poder cadastrar bio, tecnologias, áreas de interesse e links externos.
+As regras de negócio permanecerão em `REGRAS-DE-NEGOCIO.md`.
 
-**RF-006** — O usuário deve poder seguir outros usuários.
+As entidades e relacionamentos permanecerão em `MODELO-DE-DADOS.md`.
 
-**RF-007** — O usuário deve poder seguir empresas.
+---
 
-### Empresas
+# 2. Tecnologias Definidas
 
-**RF-008** — O sistema deve permitir o cadastro de empresas.
+## 2.1 Linguagem
 
-**RF-009** — Empresas devem possuir página pública.
+A linguagem principal do projeto será:
 
-**RF-010** — Empresas devem poder solicitar verificação.
+```text
+JavaScript
+```
 
-**RF-011** — Administradores devem poder aprovar ou rejeitar solicitações de verificação.
+---
 
-**RF-012** — Empresas verificadas devem possuir selo de verificação.
+## 2.2 Runtime
 
-### Eventos
+O ambiente de execução utilizado no backend será:
 
-**RF-013** — Empresas verificadas devem poder criar eventos.
+```text
+Node.js
+```
 
-**RF-014** — Um evento deve poder ser presencial, online ou híbrido.
+---
 
-**RF-015** — Um evento deve poder ser gratuito ou pago.
+## 2.3 Framework
 
-**RF-016** — Um evento deve poder possuir múltiplas empresas organizadoras.
+O framework principal será:
 
-**RF-017** — O sistema deve permitir envio de evento para aprovação.
+```text
+Next.js
+```
 
-**RF-018** — Administradores devem poder aprovar ou rejeitar eventos.
+---
 
-**RF-019** — Empresas devem poder editar eventos publicados.
+## 2.4 Frontend
 
-**RF-020** — Empresas devem poder cancelar eventos.
+A camada de interface será construída utilizando:
 
-**RF-021** — Eventos cancelados devem permanecer visíveis no histórico.
+```text
+Next.js
+React
+HTML
+CSS
+JavaScript
+```
 
-**RF-022** — O sistema deve permitir consulta de eventos por localização.
+---
 
-**RF-023** — O sistema deve permitir busca e filtros de eventos.
+## 2.5 Backend
 
-### Inscrições
+O backend será implementado dentro do próprio projeto Next.js.
 
-**RF-024** — Usuários devem poder se inscrever em eventos.
+Serão utilizados os recursos disponibilizados pelo framework para criação das rotas da API.
 
-**RF-025** — Eventos devem poder possuir limite de vagas.
+Estrutura conceitual:
 
-**RF-026** — O organizador deve poder habilitar lista de espera.
+```text
+Next.js
+│
+├── Frontend
+│
+└── Backend
+    └── API
+```
 
-**RF-027** — O organizador deve poder exigir aprovação manual da inscrição.
+---
 
-**RF-028** — O usuário deve poder cancelar sua própria inscrição.
+# 3. Tipo de Arquitetura
 
-**RF-029** — O sistema deve controlar estados da inscrição.
+A primeira versão utilizará uma arquitetura:
 
-**RF-030** — O sistema deve permitir confirmação de participação.
+```text
+FULL-STACK MONOLÍTICA
+```
+
+Isso significa que frontend e backend permanecerão dentro do mesmo projeto.
+
+Estrutura conceitual:
+
+```text
+Aplicação Next.js
+│
+├── Interface
+├── API
+├── Regras de aplicação
+├── Acesso aos dados
+└── Persistência
+```
+
+---
+
+# 4. Justificativa da Arquitetura
+
+A escolha de uma aplicação única foi feita considerando o contexto acadêmico e o estágio inicial do projeto.
+
+As principais vantagens são:
+
+* menor complexidade de configuração;
+* menor quantidade de projetos separados;
+* desenvolvimento mais simples;
+* deploy mais simples;
+* facilidade de entendimento pela equipe;
+* compartilhamento facilitado de código;
+* menor necessidade de infraestrutura;
+* facilidade de evolução do MVP.
+
+Não existe atualmente uma necessidade que justifique uma arquitetura distribuída.
+
+Portanto:
+
+```text
+Microservices não fazem parte da arquitetura inicial.
+```
+
+---
+
+# 5. Princípio Arquitetural Principal
+
+Apesar de frontend e backend estarem no mesmo projeto, o código não deverá ser desenvolvido como um único bloco.
+
+A aplicação deverá manter separação clara entre responsabilidades.
+
+Estrutura conceitual:
+
+```text
+REQUISIÇÃO
+    ↓
+ROTA
+    ↓
+VALIDAÇÃO
+    ↓
+SERVICE
+    ↓
+REPOSITORY
+    ↓
+BANCO
+```
+
+E no retorno:
+
+```text
+BANCO
+    ↓
+REPOSITORY
+    ↓
+SERVICE
+    ↓
+ROTA
+    ↓
+RESPOSTA HTTP
+```
+
+---
+
+# 6. Visão Geral da Arquitetura
+
+```text
+┌─────────────────────────────────┐
+│             USUÁRIO             │
+└────────────────┬────────────────┘
+                 │
+                 ↓
+┌─────────────────────────────────┐
+│        INTERFACE NEXT.JS        │
+│                                 │
+│  páginas                        │
+│  componentes                    │
+│  formulários                    │
+│  navegação                      │
+└────────────────┬────────────────┘
+                 │
+                 ↓
+┌─────────────────────────────────┐
+│        ROUTE HANDLERS           │
+│                                 │
+│        /api/...                 │
+└────────────────┬────────────────┘
+                 │
+                 ↓
+┌─────────────────────────────────┐
+│        DTO / VALIDATOR          │
+└────────────────┬────────────────┘
+                 │
+                 ↓
+┌─────────────────────────────────┐
+│            SERVICE              │
+│                                 │
+│ casos de uso                    │
+│ regras de aplicação             │
+└────────────────┬────────────────┘
+                 │
+                 ↓
+┌─────────────────────────────────┐
+│          REPOSITORY             │
+│                                 │
+│ acesso aos dados                │
+└────────────────┬────────────────┘
+                 │
+                 ↓
+┌─────────────────────────────────┐
+│        BANCO DE DADOS           │
+└─────────────────────────────────┘
+```
+
+---
+
+# 7. Camada de Interface
+
+A camada de interface será responsável pela interação direta com o usuário.
+
+Ela deverá cuidar de:
+
+* páginas;
+* componentes;
+* formulários;
+* navegação;
+* exibição de informações;
+* estados visuais;
+* feedback das ações;
+* apresentação de erros;
+* apresentação dos dados recebidos do backend.
+
+Exemplo:
+
+```text
+Página de cadastro
+        ↓
+Usuário preenche formulário
+        ↓
+Frontend envia solicitação
+        ↓
+API processa
+        ↓
+Frontend recebe resposta
+        ↓
+Interface apresenta resultado
+```
+
+---
+
+# 8. Componentes
+
+Componentes devem representar partes reutilizáveis da interface.
+
+Exemplos:
+
+```text
+EventCard
+ProfileCard
+BadgeCard
+CompanyCard
+ActivityCard
+RankingTable
+NotificationItem
+```
+
+Os nomes definitivos serão definidos durante a implementação.
+
+Componentes de interface não devem possuir diretamente regras complexas do domínio.
+
+---
+
+# 9. Route Handler
+
+No Next.js, a camada responsável por receber requisições da API será formada por Route Handlers.
+
+Conceitualmente, essa camada desempenha papel semelhante ao `Controller` encontrado em outras arquiteturas.
+
+Exemplo:
+
+```text
+POST /api/usuarios
+```
+
+Fluxo:
+
+```text
+Route Handler
+    ↓
+recebe requisição
+    ↓
+obtém dados
+    ↓
+valida entrada
+    ↓
+chama Service
+    ↓
+recebe resultado
+    ↓
+retorna HTTP
+```
+
+---
+
+# 10. Responsabilidades do Route Handler
+
+O Route Handler poderá:
+
+* receber a requisição;
+* ler parâmetros;
+* ler query parameters;
+* ler body;
+* acionar validação;
+* chamar o Service;
+* converter resultados para resposta HTTP;
+* definir o código HTTP adequado.
+
+Exemplo conceitual:
+
+```text
+POST /api/usuarios
+
+↓ recebe body
+
+↓ valida
+
+↓ UsuarioService.cadastrar()
+
+↓ retorna
+
+201 Created
+```
+
+---
+
+# 11. O que o Route Handler não deve fazer
+
+Evitar concentrar dentro da rota:
+
+```text
+validação complexa
++
+regra de negócio
++
+consulta de banco
++
+persistência
++
+formatação de dados
++
+controle de toda a aplicação
+```
+
+Exemplo inadequado:
+
+```text
+Route Handler
+├── verifica e-mail
+├── busca banco
+├── cria usuário
+├── valida regras
+├── salva
+├── manipula perfil
+└── responde
+```
+
+Preferível:
 
-### Programação e atividades
+```text
+Route Handler
+        ↓
+Service
+        ↓
+Repository
+```
 
-**RF-031** — Eventos devem poder possuir programação.
+---
 
-**RF-032** — Eventos devem poder possuir múltiplas trilhas.
+# 12. DTO
 
-**RF-033** — Trilhas devem poder possuir atividades.
+DTO significa:
 
-**RF-034** — Atividades devem poder existir sem trilha.
+```text
+Data Transfer Object
+```
 
-**RF-035** — Atividades devem poder exigir inscrição própria.
+Sua função é representar os dados transferidos durante determinada operação.
 
-**RF-036** — Atividades devem poder possuir limite próprio de vagas.
+Exemplo:
 
-**RF-037** — O sistema deve permitir check-in no evento.
+```text
+CreateUsuarioDTO
+
+nome
+email
+senha
+```
 
-**RF-038** — O sistema deve permitir check-in em atividades.
+O DTO não deve ser confundido com uma entidade.
 
-### Hackathons
+---
 
-**RF-039** — Um evento deve poder possuir características de hackathon.
+# 13. DTO de Entrada
 
-**RF-040** — Hackathons devem permitir participação individual, por equipe ou ambas.
+Representa dados recebidos.
 
-**RF-041** — O organizador deve poder definir tamanho mínimo e máximo de equipe.
+Exemplo:
 
-**RF-042** — O sistema deve permitir criação de equipes por usuários.
+```text
+CreateEventoDTO
 
-**RF-043** — O sistema deve permitir convite para equipe.
+nome
+descricao
+modalidade
+dataInicio
+dataFim
+capacidade
+```
 
-**RF-044** — O sistema deve permitir solicitação de entrada em equipe.
+---
 
-**RF-045** — O organizador deve poder formar equipes manualmente.
+# 14. DTO de Saída
 
-**RF-046** — Hackathons devem poder possuir múltiplas fases.
+Representa informações que serão devolvidas.
 
-**RF-047** — O organizador deve poder definir ordem e período das fases.
+Exemplo:
 
-**RF-048** — Hackathons devem poder possuir desafios.
+```text
+UsuarioResponseDTO
 
-### Submissões
+id
+nome
+email
+```
 
-**RF-049** — Participantes ou equipes devem poder realizar submissões.
+Um DTO de saída não precisa possuir todos os campos existentes na entidade.
 
-**RF-050** — O sistema deve permitir múltiplas versões de submissão.
+---
 
-**RF-051** — O sistema deve bloquear submissões fora do prazo.
+# 15. Validator
 
-**RF-052** — Versões anteriores devem permanecer registradas.
+A camada de validação será responsável por verificar o formato dos dados recebidos.
 
-### Avaliação e ranking
+Exemplo:
 
-**RF-053** — Hackathons devem poder possuir múltiplos critérios de avaliação.
+```text
+CreateUsuarioDTO
+        ↓
+Validator
+        ↓
+nome obrigatório
+email obrigatório
+email válido
+senha obrigatória
+```
 
-**RF-054** — Um critério deve poder possuir peso definido pelo evento.
+A validação estrutural deve ocorrer antes da execução principal do caso de uso.
 
-**RF-055** — Uma equipe deve poder ser avaliada por múltiplos jurados.
+---
 
-**RF-056** — O sistema deve permitir registrar resultado final.
+# 16. Validação Estrutural e Regra de Negócio
 
-**RF-057** — O sistema deve permitir exibir ranking.
+Esses conceitos não devem ser confundidos.
 
-**RF-058** — O organizador deve poder ocultar o ranking até o momento definido.
+### Validação estrutural
 
-**RF-059** — O sistema deve permitir empates quando o evento permitir.
+Exemplo:
 
-**RF-060** — O organizador deve poder definir critérios de desempate.
+```text
+email está vazio?
+email possui formato válido?
+nome foi informado?
+```
 
-**RF-061** — O organizador deve poder desclassificar uma equipe.
+### Regra de negócio
 
-### Emblemas e certificados
+Exemplo:
 
-**RF-062** — Eventos devem poder criar emblemas próprios.
+```text
+já existe usuário com esse email?
+empresa está verificada?
+evento possui vaga?
+equipe atingiu limite máximo?
+```
 
-**RF-063** — A plataforma deve permitir conceder emblemas aos usuários.
+Portanto:
 
-**RF-064** — Emblemas concedidos devem aparecer no perfil do usuário.
+```text
+VALIDATOR
+≠
+REGRA DE NEGÓCIO
+```
 
-**RF-065** — Eventos devem poder emitir certificados.
+---
 
-**RF-066** — Certificados emitidos devem permanecer vinculados ao histórico do usuário.
+# 17. Service
 
-### Patrocinadores
+A camada `Service` será responsável pelos casos de uso e pela coordenação das regras da aplicação.
 
-**RF-067** — Eventos devem poder possuir múltiplos patrocinadores.
+Exemplos:
 
-**RF-068** — Patrocinadores devem poder possuir página pública.
+```text
+UsuarioService
 
-**RF-069** — Patrocinadores devem poder possuir estandes.
+EmpresaService
 
-**RF-070** — Patrocinadores devem poder cadastrar ofertas relacionadas ao evento.
+EventoService
 
-**RF-071** — Desafios devem poder ser associados a patrocinadores.
+InscricaoService
 
-### Comunicação e notificações
+HackathonService
 
-**RF-072** — Organizadores devem poder enviar comunicados.
+EquipeService
 
-**RF-073** — Comunicados devem poder ser direcionados a grupos específicos.
+SubmissaoService
+```
 
-**RF-074** — O sistema deve possuir central de notificações.
+---
 
-**RF-075** — Usuários devem poder personalizar categorias de notificação.
+# 18. Responsabilidades do Service
 
-**RF-076** — O sistema deve permitir notificações essenciais.
+O Service poderá:
 
-**RF-077** — O sistema deve informar mudança de horário, local ou cancelamento.
+* aplicar regras de negócio;
+* coordenar operações;
+* consultar repositories;
+* verificar condições;
+* atualizar entidades;
+* iniciar operações relacionadas ao caso de uso;
+* devolver o resultado da operação.
 
-**RF-078** — O sistema deve informar convites, solicitações e alterações de equipe.
+Exemplo:
 
-**RF-079** — O sistema deve informar mudanças de fase do hackathon.
+```text
+EventoService.inscreverUsuario()
 
-**RF-080** — O sistema deve informar resultados, emblemas e certificados.
+↓
+buscar evento
 
-## 2. Requisitos Não Funcionais
+↓
+verificar estado do evento
 
-**RNF-001** — O sistema deve possuir interface responsiva.
+↓
+verificar vagas
 
-**RNF-002** — A aplicação deve ser executada utilizando Node.js e Next.js.
+↓
+verificar inscrição existente
 
-**RNF-003** — O sistema deve utilizar arquitetura organizada em responsabilidades separadas.
+↓
+determinar estado da inscrição
 
-**RNF-004** — Rotas da API não devem concentrar regras de negócio complexas.
+↓
+salvar inscrição
+```
 
-**RNF-005** — Entradas de dados devem ser validadas antes da execução das regras de negócio.
+---
 
-**RNF-006** — Operações de consulta em listas extensas devem prever paginação.
+# 19. O que o Service não deve fazer
 
-**RNF-007** — Dados históricos importantes não devem ser apagados sem necessidade.
+O Service não deve ficar diretamente responsável por detalhes HTTP.
 
-**RNF-008** — O sistema deve utilizar respostas HTTP padronizadas.
+Evitar:
 
-**RNF-009** — Endpoints devem ser documentados.
+```text
+return Response.json(...)
+```
 
-**RNF-010** — Os endpoints principais devem possuir cenários de teste documentados no Postman.
+dentro do Service.
 
-**RNF-011** — O projeto deve manter organização de código compreensível para todos os integrantes da equipe.
+Também deve evitar depender diretamente de componentes de interface.
 
-**RNF-012** — O sistema deve permitir evolução incremental sem exigir separação inicial em múltiplos serviços.
+Portanto:
+
+```text
+SERVICE
+não conhece
+BOTÃO
+PÁGINA
+HTML
+```
+
+E:
+
+```text
+SERVICE
+não deve decidir diretamente
+HTTP 201
+HTTP 404
+HTTP 409
+```
+
+A camada HTTP deve traduzir o resultado para esses códigos.
+
+---
+
+# 20. Repository
+
+O Repository será responsável pela comunicação com a persistência.
+
+Exemplos:
+
+```text
+UsuarioRepository
+
+EmpresaRepository
+
+EventoRepository
+
+InscricaoRepository
+
+EquipeRepository
+```
+
+---
+
+# 21. Responsabilidades do Repository
+
+O Repository poderá realizar operações como:
+
+```text
+buscarPorId()
+
+buscarPorEmail()
+
+listar()
+
+salvar()
+
+atualizar()
+
+buscarInscricao()
+
+buscarEquipesDoHackathon()
+```
+
+Conceitualmente:
+
+```text
+Service
+   ↓
+Repository
+   ↓
+Banco
+```
+
+---
+
+# 22. O que o Repository não deve fazer
+
+O Repository não deve concentrar regras do domínio.
+
+Exemplo inadequado:
+
+```text
+UsuarioRepository
+↓
+decidir se usuário pode participar do evento
+```
+
+Essa decisão pertence à lógica da aplicação.
+
+O Repository deve principalmente responder:
+
+```text
+quais dados existem?
+```
+
+e:
+
+```text
+quais dados precisam ser persistidos?
+```
+
+---
+
+# 23. Model / Entity
+
+Models ou Entities representam os dados centrais da aplicação.
+
+Exemplo:
+
+```text
+Usuario
+
+id
+nome
+email
+senha
+```
+
+Outro exemplo:
+
+```text
+Evento
+
+id
+nome
+descricao
+modalidade
+status
+dataInicio
+dataFim
+```
+
+As entidades conceituais estão documentadas detalhadamente em:
+
+```text
+MODELO-DE-DADOS.md
+```
+
+---
+
+# 24. Fluxo Completo de uma Requisição
+
+Exemplo conceitual:
+
+```text
+Usuário
+   ↓
+Frontend
+   ↓
+POST /api/eventos
+   ↓
+Route Handler
+   ↓
+CreateEventoDTO
+   ↓
+Validator
+   ↓
+EventoService
+   ↓
+EventoRepository
+   ↓
+Banco
+```
+
+Retorno:
+
+```text
+Banco
+   ↓
+EventoRepository
+   ↓
+EventoService
+   ↓
+Route Handler
+   ↓
+HTTP Response
+   ↓
+Frontend
+   ↓
+Usuário
+```
+
+---
+
+# 25. Exemplo: Cadastro de Usuário
+
+O fluxo arquitetural será:
+
+```text
+Frontend
+        ↓
+POST /api/usuarios
+        ↓
+Route Handler
+        ↓
+CreateUsuarioDTO
+        ↓
+UsuarioValidator
+        ↓
+UsuarioService
+        ↓
+UsuarioRepository
+        ↓
+Banco de dados
+```
+
+Detalhamento completo desse exemplo ficará em:
+
+```text
+GUIA-CICLO-ENDPOINT.md
+```
+
+---
+
+# 26. Organização por Domínio
+
+Para evitar que o projeto se transforme em uma coleção desorganizada de arquivos, as funcionalidades devem ser identificadas por domínio.
+
+Domínios principais:
+
+```text
+usuarios
+
+empresas
+
+eventos
+
+inscricoes
+
+programacao
+
+atividades
+
+hackathons
+
+equipes
+
+submissoes
+
+avaliacoes
+
+ranking
+
+emblemas
+
+certificados
+
+patrocinadores
+
+comunicacao
+
+notificacoes
+```
+
+---
+
+# 27. Módulo de Usuários
+
+Responsabilidades principais:
+
+```text
+cadastro
+perfil
+consulta
+edição
+seguidores
+tecnologias
+áreas de interesse
+links profissionais
+```
+
+Componentes conceituais:
+
+```text
+Usuario
+Perfil
+Tecnologia
+AreaInteresse
+SeguimentoUsuario
+```
+
+---
+
+# 28. Módulo de Empresas
+
+Responsabilidades:
+
+```text
+cadastro de empresa
+perfil público
+verificação
+seguidores
+```
+
+Entidades principais:
+
+```text
+Empresa
+VerificacaoEmpresa
+SeguimentoEmpresa
+```
+
+---
+
+# 29. Módulo de Eventos
+
+Responsabilidades:
+
+```text
+criação
+edição
+aprovação
+publicação
+cancelamento
+consulta
+descoberta
+organização
+```
+
+Entidades:
+
+```text
+Evento
+EventoOrganizador
+```
+
+---
+
+# 30. Módulo de Inscrições
+
+Responsabilidades:
+
+```text
+inscrição
+aprovação
+rejeição
+cancelamento
+confirmação
+controle de vagas
+lista de espera
+```
+
+Entidade principal:
+
+```text
+InscricaoEvento
+```
+
+---
+
+# 31. Módulo de Programação
+
+Responsabilidades:
+
+```text
+trilhas
+atividades
+horários
+locais
+inscrições em atividades
+check-in
+```
+
+Entidades principais:
+
+```text
+Trilha
+Atividade
+InscricaoAtividade
+CheckInEvento
+CheckInAtividade
+```
+
+---
+
+# 32. Módulo de Hackathons
+
+Responsabilidades:
+
+```text
+configuração
+regras de participação
+fases
+desafios
+```
+
+Entidades:
+
+```text
+Hackathon
+FaseHackathon
+Desafio
+```
+
+---
+
+# 33. Módulo de Equipes
+
+Responsabilidades:
+
+```text
+criação
+formação
+convites
+solicitações
+membros
+liderança
+desclassificação
+```
+
+Entidades:
+
+```text
+Equipe
+MembroEquipe
+ConviteEquipe
+SolicitacaoEntradaEquipe
+```
+
+---
+
+# 34. Módulo de Submissões
+
+Responsabilidades:
+
+```text
+projeto
+envio
+versionamento
+prazo
+histórico
+```
+
+Entidades:
+
+```text
+Submissao
+VersaoSubmissao
+```
+
+---
+
+# 35. Módulo de Avaliações
+
+Responsabilidades:
+
+```text
+critérios
+jurados
+avaliações
+resultado final
+```
+
+Entidades:
+
+```text
+CriterioAvaliacao
+JuradoHackathon
+Avaliacao
+Resultado
+```
+
+---
+
+# 36. Módulo de Ranking
+
+Responsabilidades:
+
+```text
+classificação
+visibilidade
+publicação
+resultados
+```
+
+Entidade principal:
+
+```text
+Ranking
+```
+
+---
+
+# 37. Módulo de Conquistas
+
+Responsabilidades:
+
+```text
+emblemas
+concessões
+certificados
+histórico
+```
+
+Entidades:
+
+```text
+Emblema
+EmblemaConcedido
+Certificado
+CertificadoEmitido
+```
+
+---
+
+# 38. Módulo de Patrocínio
+
+Responsabilidades:
+
+```text
+patrocinadores
+estandes
+ofertas
+desafios patrocinados
+```
+
+Entidades:
+
+```text
+Patrocinio
+Estande
+Oferta
+```
+
+---
+
+# 39. Módulo de Comunicação
+
+Responsabilidades:
+
+```text
+comunicados
+segmentação de público
+mensagens relacionadas ao evento
+```
+
+Entidade:
+
+```text
+Comunicado
+```
+
+---
+
+# 40. Módulo de Notificações
+
+Responsabilidades:
+
+```text
+central de notificações
+preferências
+notificações essenciais
+notificações operacionais
+notificações sociais
+notificações promocionais
+```
+
+Entidades:
+
+```text
+Notificacao
+PreferenciaNotificacao
+```
+
+---
+
+# 41. Dependência entre Módulos
+
+Os módulos não devem depender uns dos outros sem necessidade.
+
+Exemplo de fluxo aceitável:
+
+```text
+InscricaoService
+        ↓
+EventoRepository
+```
+
+porque uma inscrição precisa consultar informações do evento.
+
+Mas deve ser evitado:
+
+```text
+EventoService
+   ↓
+InscricaoService
+   ↓
+EventoService
+```
+
+Isso cria dependência circular.
+
+---
+
+# 42. Direção das Dependências
+
+Sempre que possível:
+
+```text
+Route Handler
+     ↓
+Service
+     ↓
+Repository
+```
+
+Não:
+
+```text
+Repository
+     ↓
+Service
+```
+
+E não:
+
+```text
+Repository
+     ↓
+Route Handler
+```
+
+---
+
+# 43. Acesso entre Módulos
+
+Quando um domínio precisar de informações pertencentes a outro domínio, a dependência deve ser explícita.
+
+Exemplo:
+
+```text
+InscricaoService
+
+precisa saber:
+
+evento existe?
+evento possui vagas?
+evento aceita inscrições?
+```
+
+Então pode utilizar:
+
+```text
+EventoRepository
+```
+
+ou uma operação apropriada fornecida pelo módulo de eventos.
+
+Evitar duplicar regras.
+
+---
+
+# 44. Persistência
+
+A tecnologia de banco ainda não foi definida.
+
+Portanto, neste momento:
+
+```text
+Banco:
+A DEFINIR
+
+ORM:
+A DEFINIR
+```
+
+A arquitetura deve permitir a escolha posterior sem exigir alteração completa dos casos de uso.
+
+---
+
+# 45. Estratégia para Persistência
+
+O Service não deve depender diretamente de detalhes específicos do banco sempre que for viável.
+
+Preferível:
+
+```text
+Service
+   ↓
+Repository
+   ↓
+ORM
+   ↓
+Banco
+```
+
+Assim, detalhes de persistência permanecem concentrados em uma região específica da aplicação.
+
+---
+
+# 46. Transações
+
+A estratégia técnica de transações será definida após a escolha do banco e da tecnologia de persistência.
+
+Entretanto, operações que alterem múltiplos dados relacionados devem ser identificadas como candidatas a execução atômica.
+
+Exemplo conceitual:
+
+```text
+Aceitar convite
+        ↓
+alterar convite
+        +
+criar membro da equipe
+```
+
+Essas duas alterações representam uma única operação lógica.
+
+---
+
+# 47. Operações que Merecem Atenção Transacional
+
+Exemplos:
+
+```text
+aprovar inscrição + ocupar vaga
+
+cancelar inscrição + liberar vaga
+
+aceitar convite + adicionar membro
+
+conceder emblema + registrar histórico
+
+emitir certificado + registrar emissão
+
+desclassificar equipe + registrar motivo
+```
+
+A implementação técnica será definida posteriormente.
+
+---
+
+# 48. Concorrência
+
+Algumas operações podem ocorrer simultaneamente.
+
+Exemplo:
+
+```text
+Evento possui 1 vaga
+
+Usuário A tenta se inscrever
+Usuário B tenta se inscrever
+```
+
+A aplicação não deve permitir:
+
+```text
+capacidade = 100
+participantes confirmados = 101
+```
+
+Outro exemplo:
+
+```text
+Equipe possui 1 vaga restante
+
+dois convites são aceitos simultaneamente
+```
+
+Esse cenário também deverá respeitar o limite da equipe.
+
+---
+
+# 49. Áreas Sensíveis à Concorrência
+
+Devem receber atenção especial:
+
+```text
+limite de vagas do evento
+
+limite de vagas da atividade
+
+limite de integrantes da equipe
+
+lista de espera
+
+aceitação de convites
+
+submissão próxima ao prazo final
+
+concessão de emblemas
+
+emissão de certificados
+```
+
+---
+
+# 50. Integrações Externas
+
+No momento, nenhuma integração externa obrigatória foi consolidada.
+
+Possíveis integrações futuras incluem:
+
+```text
+mapas/geolocalização
+
+e-mail
+
+notificações push
+
+armazenamento de imagens
+
+pagamentos
+
+carteira interna
+
+serviços de autenticação
+```
+
+Essas integrações não devem ser adicionadas antes de haver necessidade real.
+
+---
+
+# 51. Sistema de Pagamentos
+
+O sistema de créditos internos do evento não faz parte da primeira fase.
+
+Portanto:
+
+```text
+Carteira
+Saldo
+Transação
+Compra
+Estorno
+```
+
+não serão implementados inicialmente.
+
+A arquitetura deverá permitir que esse módulo seja adicionado futuramente sem contaminar os módulos principais.
+
+---
+
+# 52. Autenticação
+
+O sistema precisará possuir autenticação porque existem operações específicas por usuário, empresa e administrador.
+
+Entretanto, a tecnologia de autenticação ainda não foi definida.
+
+Portanto:
+
+```text
+Estratégia de autenticação:
+A DEFINIR
+```
+
+Possibilidades técnicas serão avaliadas posteriormente.
+
+---
+
+# 53. Autorização
+
+A aplicação possuirá diferentes responsabilidades associadas a:
+
+```text
+USUARIO
+
+EMPRESA
+
+ADMINISTRADOR
+
+ORGANIZADOR
+
+JURADO
+```
+
+A estratégia técnica definitiva para representar essas permissões ainda será definida.
+
+Este documento não deve antecipar uma tecnologia específica antes dessa decisão.
+
+---
+
+# 54. Tratamento de Erros
+
+Os erros da aplicação devem ser controlados.
+
+Fluxo esperado:
+
+```text
+Repository
+    ↓
+Service
+    ↓
+Route Handler
+    ↓
+Resposta HTTP adequada
+```
+
+Exemplos conceituais:
+
+```text
+usuário não encontrado
+
+evento não encontrado
+
+email já cadastrado
+
+evento sem vagas
+
+equipe lotada
+
+submissão fora do prazo
+```
+
+---
+
+# 55. Tipos Conceituais de Erro
+
+A aplicação pode distinguir conceitualmente:
+
+```text
+erro de validação
+
+recurso inexistente
+
+conflito
+
+regra de negócio violada
+
+erro interno
+```
+
+A tradução para códigos HTTP será definida no documento `API.md`.
+
+---
+
+# 56. Configuração
+
+Configurações dependentes do ambiente não devem ficar espalhadas pelo código.
+
+Exemplos:
+
+```text
+URL do banco
+
+segredos
+
+URLs externas
+
+configuração de serviços
+```
+
+Esses valores deverão ser fornecidos por configuração apropriada do ambiente.
+
+---
+
+# 57. Variáveis de Ambiente
+
+O projeto deverá utilizar arquivos ou mecanismos de ambiente apropriados ao Next.js.
+
+Estrutura esperada:
+
+```text
+.env
+.env.example
+```
+
+Valores reais sensíveis não devem ser colocados no arquivo de exemplo.
+
+---
+
+# 58. Organização Inicial do Projeto
+
+Uma estrutura inicial possível será:
+
+```text
+src/
+│
+├── app/
+│   │
+│   ├── api/
+│   │
+│   └── páginas da aplicação
+│
+├── components/
+│
+├── services/
+│
+├── repositories/
+│
+├── models/
+│
+├── dto/
+│
+├── validators/
+│
+├── utils/
+│
+└── config/
+```
+
+Essa é uma estrutura inicial e poderá ser refinada no `MAPA-FASE-1.md`.
+
+---
+
+# 59. Estrutura das Rotas da API
+
+As rotas serão organizadas inicialmente dentro:
+
+```text
+src/app/api/
+```
+
+Exemplo conceitual:
+
+```text
+src/app/api/
+│
+├── usuarios/
+├── empresas/
+├── eventos/
+├── inscricoes/
+├── atividades/
+├── hackathons/
+├── equipes/
+├── submissoes/
+└── notificacoes/
+```
+
+Os endpoints definitivos serão especificados em `API.md`.
+
+---
+
+# 60. Estrutura de Services
+
+Estrutura inicial:
+
+```text
+src/services/
+│
+├── usuario/
+├── empresa/
+├── evento/
+├── inscricao/
+├── atividade/
+├── hackathon/
+├── equipe/
+├── submissao/
+├── avaliacao/
+└── notificacao/
+```
+
+A forma definitiva poderá ser simplificada durante a implementação.
+
+---
+
+# 61. Estrutura de Repositories
+
+Estrutura conceitual:
+
+```text
+src/repositories/
+│
+├── usuarioRepository
+├── empresaRepository
+├── eventoRepository
+├── inscricaoRepository
+├── atividadeRepository
+├── hackathonRepository
+├── equipeRepository
+└── submissaoRepository
+```
+
+A nomenclatura definitiva seguirá o padrão adotado pela equipe.
+
+---
+
+# 62. Estrutura de DTOs
+
+Os DTOs poderão ser organizados por domínio.
+
+Exemplo:
+
+```text
+src/dto/
+│
+├── usuario/
+│   ├── createUsuario
+│   └── updateUsuario
+│
+├── evento/
+│   ├── createEvento
+│   └── updateEvento
+│
+└── equipe/
+```
+
+---
+
+# 63. Estrutura de Validators
+
+Conceitualmente:
+
+```text
+src/validators/
+│
+├── usuario/
+├── empresa/
+├── evento/
+├── inscricao/
+└── equipe/
+```
+
+A biblioteca de validação ainda não foi definida.
+
+---
+
+# 64. Reutilização de Código
+
+Código compartilhado deve possuir uma responsabilidade clara.
+
+Exemplos:
+
+```text
+formatação de data
+
+paginação
+
+tratamento comum de respostas
+
+conversões
+
+funções auxiliares
+```
+
+Evitar criar um arquivo genérico gigantesco contendo funções sem relação entre si.
+
+---
+
+# 65. Regra sobre Utils
+
+O diretório `utils` não deve virar um local para armazenar qualquer código sem classificação.
+
+Preferível:
+
+```text
+utils/date
+utils/pagination
+```
+
+em vez de:
+
+```text
+utils/tudo.js
+```
+
+---
+
+# 66. Frontend e Backend no Mesmo Projeto
+
+Apesar de compartilharem o mesmo projeto:
+
+```text
+frontend
+≠
+backend
+```
+
+A camada de interface não deve acessar diretamente a persistência.
+
+Fluxo esperado:
+
+```text
+Interface
+   ↓
+API / camada servidor
+   ↓
+Service
+   ↓
+Repository
+   ↓
+Banco
+```
+
+---
+
+# 67. Estratégia de Desenvolvimento
+
+A implementação será realizada de forma incremental.
+
+Não devem ser criados todos os módulos antecipadamente apenas porque estão previstos na arquitetura.
+
+O fluxo será:
+
+```text
+Sprint
+   ↓
+implementar funcionalidades da Sprint
+   ↓
+testar
+   ↓
+corrigir
+   ↓
+concluir
+   ↓
+próxima Sprint
+```
+
+---
+
+# 68. Estratégia de Evolução
+
+A arquitetura deve permitir que funcionalidades futuras sejam adicionadas progressivamente.
+
+Exemplos:
+
+```text
+carteira interna
+
+pagamentos
+
+recomendações de eventos
+
+analytics
+
+integrações externas
+```
+
+Esses recursos não devem exigir reescrita completa do sistema.
+
+---
+
+# 69. Possível Separação Futura
+
+Caso o projeto cresça significativamente, alguns componentes poderão futuramente ser separados.
+
+Exemplo:
+
+```text
+Aplicação atual
+
+Next.js
+├── frontend
+└── backend
+```
+
+Poderia futuramente evoluir para:
+
+```text
+Frontend
+        ↓
+API independente
+        ↓
+serviços especializados
+```
+
+Entretanto, isso não faz parte da arquitetura atual.
+
+A separação somente deverá ocorrer se houver justificativa real.
+
+---
+
+# 70. Arquitetura Não Deve Antecipar Complexidade
+
+Não serão adicionados inicialmente apenas por padrão:
+
+```text
+microservices
+
+message broker
+
+event sourcing
+
+CQRS
+
+Kubernetes
+
+múltiplos bancos
+
+cache distribuído
+```
+
+Qualquer recurso desse tipo deverá possuir uma necessidade concreta antes de ser incorporado.
+
+---
+
+# 71. Fluxo Arquitetural Resumido
+
+```text
+USUÁRIO
+   ↓
+INTERFACE
+   ↓
+ROUTE HANDLER
+   ↓
+DTO
+   ↓
+VALIDATOR
+   ↓
+SERVICE
+   ↓
+REPOSITORY
+   ↓
+PERSISTÊNCIA
+```
+
+Retorno:
+
+```text
+PERSISTÊNCIA
+   ↓
+REPOSITORY
+   ↓
+SERVICE
+   ↓
+ROUTE HANDLER
+   ↓
+HTTP RESPONSE
+   ↓
+INTERFACE
+   ↓
+USUÁRIO
+```
+
+---
+
+# 72. Regra de Dependência
+
+A direção padrão deve ser:
+
+```text
+Route Handler
+        ↓
+Service
+        ↓
+Repository
+        ↓
+Persistência
+```
+
+Evitar:
+
+```text
+Repository → Route Handler
+
+Repository → Interface
+
+Model → Route Handler
+
+Service → Página React
+```
+
+---
+
+# 73. Responsabilidade Resumida das Camadas
+
+| Elemento       | Responsabilidade principal                  |
+| -------------- | ------------------------------------------- |
+| Página         | Apresentar uma tela                         |
+| Componente     | Representar parte reutilizável da interface |
+| Route Handler  | Receber e responder requisições HTTP        |
+| DTO            | Representar dados transferidos              |
+| Validator      | Validar estrutura dos dados                 |
+| Service        | Executar casos de uso e regras              |
+| Repository     | Consultar e persistir dados                 |
+| Model / Entity | Representar os dados do domínio             |
+| Config         | Centralizar configurações                   |
+| Utils          | Funções auxiliares reutilizáveis            |
+
+---
+
+# 74. Exemplo Resumido por Responsabilidade
+
+Para cadastrar um usuário:
+
+```text
+Route Handler
+"Recebi uma solicitação de cadastro."
+```
+
+```text
+DTO
+"Estes são os dados permitidos."
+```
+
+```text
+Validator
+"Os dados possuem formato válido?"
+```
+
+```text
+Service
+"O usuário pode ser cadastrado?"
+```
+
+```text
+Repository
+"Já existe esse e-mail? Salve o usuário."
+```
+
+```text
+Model / Entity
+"Esta é a representação do usuário."
+```
+
+```text
+Route Handler
+"Retorne o resultado ao cliente."
+```
+
+---
+
+# 75. Decisões Arquiteturais Consolidadas
+
+Até o momento estão definidas:
+
+```text
+Linguagem:
+JavaScript
+
+Runtime:
+Node.js
+
+Framework:
+Next.js
+
+Frontend:
+Next.js + React + HTML + CSS
+
+Backend:
+Next.js
+
+Formato:
+Full-stack
+
+Distribuição:
+Aplicação única
+
+Estilo:
+Monolítico organizado por responsabilidades
+```
+
+---
+
+# 76. Decisões Técnicas Pendentes
+
+Ainda deverão ser decididos:
+
+```text
+Banco de dados
+
+ORM
+
+Biblioteca de validação
+
+Estratégia de autenticação
+
+Estratégia de autorização
+
+Estratégia definitiva de IDs
+
+Sistema de armazenamento de imagens
+
+Serviço de notificações externas
+
+Hospedagem
+
+Deploy
+
+CI/CD
+```
+
+Nenhuma dessas tecnologias deve ser presumida neste documento antes da decisão da equipe.
+
+---
+
+# 77. Documentos Relacionados
+
+```text
+REQUISITOS.md
+→ o que o sistema precisa oferecer
+
+REGRAS-DE-NEGOCIO.md
+→ condições e restrições do domínio
+
+MODELO-DE-DADOS.md
+→ entidades e relacionamentos
+
+ARQUITETURA.md
+→ organização técnica da aplicação
+
+GUIA-CICLO-ENDPOINT.md
+→ como implementar um endpoint seguindo a arquitetura
+
+API.md
+→ contratos HTTP
+
+TESTES-POSTMAN.md
+→ validação dos endpoints
+
+BACKLOG.md
+→ trabalho necessário
+
+SPRINTS.md
+→ ordem de implementação
+
+MAPA-FASE-1.md
+→ estrutura prevista do projeto
+```
+
+---
+
+# 78. Regra de Evolução da Arquitetura
+
+Sempre que uma decisão modificar:
+
+* organização de módulos;
+* responsabilidades;
+* persistência;
+* comunicação;
+* framework;
+* dependências;
+* fluxo das requisições;
+* estrutura principal do projeto;
+
+este documento deverá ser revisado.
+
+A arquitetura deve servir para simplificar o desenvolvimento e orientar a equipe.
+
+Ela não deve introduzir complexidade apenas para seguir padrões.
