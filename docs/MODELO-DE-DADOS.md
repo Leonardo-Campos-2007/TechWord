@@ -59,155 +59,17 @@ Notificações
 
 # 3. Árvore Geral de Entidades e Relacionamentos
 
-```text
-PLATAFORMA
-│
-├── USUARIO
-│   │
-│   ├── PERFIL
-│   │   ├── PERFIL_TECNOLOGIA
-│   │   │   └── TECNOLOGIA
-│   │   │
-│   │   ├── PERFIL_AREA_INTERESSE
-│   │   │   └── AREA_INTERESSE
-│   │   │
-│   │   └── LINK_PROFISSIONAL
-│   │
-│   ├── SEGUIMENTO_USUARIO
-│   │   ├── usuário seguidor
-│   │   └── usuário seguido
-│   │
-│   ├── SEGUIMENTO_EMPRESA
-│   │   ├── usuário
-│   │   └── empresa
-│   │
-│   ├── INSCRICAO_EVENTO
-│   │   └── EVENTO
-│   │
-│   ├── INSCRICAO_ATIVIDADE
-│   │   └── ATIVIDADE
-│   │
-│   ├── CHECKIN_EVENTO
-│   │   └── EVENTO
-│   │
-│   ├── CHECKIN_ATIVIDADE
-│   │   └── ATIVIDADE
-│   │
-│   ├── MEMBRO_EQUIPE
-│   │   └── EQUIPE
-│   │
-│   ├── CONVITE_EQUIPE
-│   │   └── EQUIPE
-│   │
-│   ├── SOLICITACAO_ENTRADA_EQUIPE
-│   │   └── EQUIPE
-│   │
-│   ├── JURADO_HACKATHON
-│   │   └── HACKATHON
-│   │
-│   ├── AVALIACAO
-│   │
-│   ├── EMBLEMA_CONCEDIDO
-│   │   └── EMBLEMA
-│   │
-│   ├── CERTIFICADO_EMITIDO
-│   │   └── CERTIFICADO
-│   │
-│   ├── PREFERENCIA_NOTIFICACAO
-│   │
-│   └── NOTIFICACAO
-│
-├── EMPRESA
-│   │
-│   ├── VERIFICACAO_EMPRESA
-│   │
-│   ├── EVENTO_ORGANIZADOR
-│   │   └── EVENTO
-│   │
-│   ├── PATROCINIO
-│   │   └── EVENTO
-│   │
-│   ├── ESTANDE
-│   │   └── EVENTO
-│   │
-│   └── OFERTA
-│       └── EVENTO
-│
-├── EVENTO
-│   │
-│   ├── EVENTO_ORGANIZADOR
-│   │   └── EMPRESA
-│   │
-│   ├── INSCRICAO_EVENTO
-│   │   └── USUARIO
-│   │
-│   ├── TRILHA
-│   │   └── ATIVIDADE
-│   │
-│   ├── ATIVIDADE
-│   │   ├── INSCRICAO_ATIVIDADE
-│   │   │   └── USUARIO
-│   │   │
-│   │   └── CHECKIN_ATIVIDADE
-│   │       └── USUARIO
-│   │
-│   ├── CHECKIN_EVENTO
-│   │   └── USUARIO
-│   │
-│   ├── COMUNICADO
-│   │
-│   ├── PATROCINIO
-│   │   └── EMPRESA
-│   │
-│   ├── ESTANDE
-│   │
-│   ├── OFERTA
-│   │
-│   ├── EMBLEMA
-│   │   └── EMBLEMA_CONCEDIDO
-│   │
-│   ├── CERTIFICADO
-│   │   └── CERTIFICADO_EMITIDO
-│   │
-│   └── HACKATHON
-│       │
-│       ├── FASE_HACKATHON
-│       │
-│       ├── DESAFIO
-│       │   └── PATROCINADOR opcional
-│       │
-│       ├── EQUIPE
-│       │   ├── MEMBRO_EQUIPE
-│       │   ├── CONVITE_EQUIPE
-│       │   └── SOLICITACAO_ENTRADA_EQUIPE
-│       │
-│       ├── SUBMISSAO
-│       │   └── VERSAO_SUBMISSAO
-│       │
-│       ├── CRITERIO_AVALIACAO
-│       │
-│       ├── JURADO_HACKATHON
-│       │
-│       ├── AVALIACAO
-│       │
-│       ├── RESULTADO
-│       │
-│       └── RANKING
-│
-└── ADMINISTRADOR
-    │
-    ├── analisa VERIFICACAO_EMPRESA
-    │
-    └── analisa EVENTO
+<img width="1086" height="1448" alt="ChatGPT Image 10 de set  de 2026, 10_23_43" src="https://github.com/user-attachments/assets/87803bf9-d356-4c23-b67f-5cedba1eaad8" />
+
 ```
 
 ---
 
-Mapa das Entities
+## Mapa das Entities
 
 Cada arquivo abaixo representa uma Entity independente do sistema.
 
-
+```text
 src/
 └── entities/
     │
@@ -261,8 +123,9 @@ src/
         ├── Comunicado.js
         ├── Notificacao.js
         └── PreferenciaNotificacao.js
+```
 
-        
+ 
 
 # 4. Usuário
 
