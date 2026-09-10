@@ -203,6 +203,64 @@ PLATAFORMA
 
 ---
 
+Mapa das Entities
+
+Cada arquivo abaixo representa uma Entity independente do sistema.
+
+src/
+└── entities/
+    │
+    ├── usuario/
+    │   ├── Usuario.js
+    │   ├── Perfil.js
+    │   ├── Tecnologia.js
+    │   └── AreaInteresse.js
+    │
+    ├── empresa/
+    │   ├── Empresa.js
+    │   └── VerificacaoEmpresa.js
+    │
+    ├── evento/
+    │   ├── Evento.js
+    │   ├── EventoOrganizador.js
+    │   ├── InscricaoEvento.js
+    │   ├── Trilha.js
+    │   ├── Atividade.js
+    │   ├── InscricaoAtividade.js
+    │   ├── CheckInEvento.js
+    │   └── CheckInAtividade.js
+    │
+    ├── hackathon/
+    │   ├── Hackathon.js
+    │   ├── FaseHackathon.js
+    │   ├── Desafio.js
+    │   ├── Equipe.js
+    │   ├── MembroEquipe.js
+    │   ├── ConviteEquipe.js
+    │   ├── SolicitacaoEntradaEquipe.js
+    │   ├── Submissao.js
+    │   ├── VersaoSubmissao.js
+    │   ├── CriterioAvaliacao.js
+    │   ├── JuradoHackathon.js
+    │   ├── Avaliacao.js
+    │   └── Resultado.js
+    │
+    ├── conquista/
+    │   ├── Emblema.js
+    │   ├── EmblemaConcedido.js
+    │   ├── Certificado.js
+    │   └── CertificadoEmitido.js
+    │
+    ├── patrocinio/
+    │   ├── Patrocinio.js
+    │   ├── Estande.js
+    │   └── Oferta.js
+    │
+    └── comunicacao/
+        ├── Comunicado.js
+        ├── Notificacao.js
+        └── PreferenciaNotificacao.js
+
 # 4. Usuário
 
 ## 4.1 Entidade USUARIO
