@@ -207,6 +207,7 @@ Mapa das Entities
 
 Cada arquivo abaixo representa uma Entity independente do sistema.
 
+
 src/
 └── entities/
     │
@@ -260,6 +261,8 @@ src/
         ├── Comunicado.js
         ├── Notificacao.js
         └── PreferenciaNotificacao.js
+
+        
 
 # 4. Usuário
 
