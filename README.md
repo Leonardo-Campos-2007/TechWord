@@ -1,127 +1,141 @@
-# TechWord
+# Plataforma de Eventos e Hackathons de Tecnologia
 
-## 1. Introdução
+## 1. Visão Geral
 
-O ecossistema de hackathons e eventos de tecnologia tem crescido exponencialmente nos últimos anos. Empresas buscam talentos, desenvolvedores buscam oportunidades de aprendizado e networking, e comunidades tech precisam de espaços para se organizar.
+Este projeto acadêmico propõe o desenvolvimento de uma plataforma centralizada para descoberta, inscrição e acompanhamento de eventos e hackathons de tecnologia.
 
-Atualmente, não existe uma plataforma centralizada que integre de forma efetiva:
+A plataforma permitirá que usuários encontrem eventos próximos ou online, realizem inscrições, acompanhem programação, atividades, desafios, equipes, resultados, rankings, emblemas e certificados.
 
-- ✓ Cadastro e gestão de perfis de participantes
-- ✓ Criação e divulgação de eventos por empresas
-- ✓ Acompanhamento de etapas de hackathons em tempo real
-- ✓ Integração com ferramentas de desenvolvimento e comunicação
+Empresas poderão criar páginas públicas, solicitar verificação, organizar eventos, atuar como patrocinadoras e acompanhar participantes.
 
-Este projeto surge como resposta a essa necessidade do mercado, oferecendo uma solução completa, escalável e orientada ao usuário.
+## 2. Problema
 
----
+Atualmente, informações sobre eventos e hackathons de tecnologia ficam distribuídas em diversas fontes, como redes sociais, sites de empresas, plataformas de inscrição, comunidades e grupos privados.
 
-## 2. O Que É
+Essa fragmentação dificulta:
 
-A Plataforma de Hackathons e Eventos de Tecnologia é uma aplicação web e mobile que funciona como um ecossistema completo para organizar, divulgar e participar de eventos focados em tecnologia.
+- encontrar eventos relevantes;
+- acompanhar inscrições;
+- visualizar cronogramas;
+- acompanhar hackathons;
+- formar equipes;
+- consultar rankings;
+- manter histórico de participação e conquistas.
 
-### 2.1 Definição
+## 3. Solução
 
-Uma plataforma SaaS (Software as a Service) que centraliza a experiência de hackathons e eventos de tecnologia, fornecendo ferramentas de gestão para empresas organizadoras e interface intuitiva para participantes.
+Criar uma plataforma única que concentre:
 
-### 2.2 Principais Características
+- descoberta de eventos;
+- eventos presenciais, online e híbridos;
+- inscrição em eventos;
+- acompanhamento da programação;
+- hackathons;
+- equipes;
+- desafios;
+- submissões;
+- resultados;
+- rankings;
+- emblemas;
+- certificados;
+- páginas de empresas;
+- patrocinadores;
+- notificações personalizáveis.
 
-**Páginas de Eventos**
-- Empresas criam páginas detalhadas de seus hackathons e eventos, com informações sobre temas, prêmios, cronograma e inscrições
+## 4. Público-Alvo
 
-**Sistema de Inscrição**
-- Inscrição simplificada em eventos com validação de perfil e critérios de elegibilidade
+### Usuários
 
-**Acompanhamento de Etapas (Hackathons)**
-- Dashboard em tempo real mostrando fases do hackathon: inscrições, submissões, avaliação, premiação
+Participantes interessados em tecnologia, eventos, palestras, workshops e hackathons.
 
-**Divulgação de Eventos**
-- Feed de eventos descoberta com filtros por tipo, tema, localização e data
+### Empresas
 
----
+Organizações que poderão:
 
-## 3. Objetivos
+- possuir página pública;
+- solicitar verificação;
+- organizar eventos;
+- cadastrar hackathons;
+- atuar como patrocinadoras;
+- administrar atividades e participantes.
 
-### 3.1 Objetivo Geral
+### Administradores
 
-Criar uma plataforma centralizada que consolide a experiência completa de hackathons e eventos de tecnologia, facilitando a conexão entre participantes, empresas organizadoras e comunidades tech, potencializando oportunidades de aprendizado, inovação e networking.
+Responsáveis pela gestão geral da plataforma, validação de empresas e aprovação de eventos.
 
-### 3.2 Objetivos Específicos
+## 5. Objetivo Geral
 
-- Oferecer uma experiência amigável para participantes descobrirem e se inscreverem em eventos de tecnologia
-- Proporcionar às empresas ferramentas poderosas para organizar, gerenciar e divulgar seus hackathons e eventos
-- Criar um sistema de acompanhamento transparente das etapas de hackathons para todos os envolvidos
-- Democratizar o acesso a oportunidades de eventos tech em todo o Brasil (com potencial global)
-- Validar um modelo de negócio sustentável que beneficie todos os stakeholders
+Centralizar a descoberta, participação e acompanhamento de eventos e hackathons de tecnologia em uma única plataforma.
 
----
+## 6. Objetivos Específicos
 
-## 4. O Que Faz (Funcionalidades)
+- facilitar a descoberta de eventos;
+- aumentar a visibilidade de eventos tecnológicos;
+- permitir acompanhamento de eventos em tempo real;
+- facilitar inscrições e participação em hackathons;
+- oferecer histórico público de conquistas;
+- aproximar participantes, empresas e patrocinadores;
+- criar uma base consistente de usuários, eventos e empresas.
 
-### 4.1 Para Participantes (Usuários)
+## 7. Stack Inicial
 
-**Descoberta de Eventos**
-- Feed com filtros por tipo de evento, tecnologia, localização, datas
+### Linguagem
+JavaScript
 
-**Inscrição em Eventos**
-- Inscrição simplificada com um clique, confirmação por email, ingressos digitais
+### Runtime
+Node.js
 
-**Acompanhamento de Etapas**
-- Dashboard personalizado mostrando status do hackathon (inscrição, submissão, avaliação, resultados)
+### Framework principal
+Next.js
 
-### 4.2 Para Empresas (Organizadores)
+### Frontend
+- Next.js
+- React
+- HTML
+- CSS
 
-**Criação de Página de Evento**
-- Formulário intuitivo para criar evento com logo, descrição, cronograma, prêmios, temática
+### Backend
+- Next.js
+- Route Handlers
+- Services
+- Repositories
+- validação de dados
+- acesso ao banco
 
-**Gestão de Inscrições**
-- Painel com lista de inscritos, filtros, exportação de dados, comunicação em massa
+### Arquitetura inicial
+Aplicação full-stack monolítica em um único projeto Next.js.
 
-**Configuração de Etapas do Hackathon**
-- Definir datas de inscrição, submissão, avaliação, premiação com notificações automáticas
+## 8. Documentação
 
-**Divulgação e Marketing**
-- Página da empresa, promoção do evento, integração com redes sociais, QR code de inscrição
+A documentação principal está organizada em:
 
-**Analytics e Relatórios**
-- Dashboard com métricas: inscritos, taxa de conversão, demográficos, engajamento
+- `REQUISITOS.md`
+- `REGRAS-DE-NEGOCIO.md`
+- `MODELO-DE-DADOS.md`
+- `ARQUITETURA.md`
+- `GUIA-CICLO-ENDPOINT.md`
+- `API.md`
+- `TESTES-POSTMAN.md`
+- `BACKLOG.md`
+- `SPRINTS.md`
+- `MAPA-FASE-1.md`
 
-### 4.3 Funcionalidades Gerais da Plataforma
+## 9. Escopo Inicial
 
-**Sistema de Notificações**
-- Email, push notifications, SMS para manter usuários informados sobre eventos e etapas
+O projeto será desenvolvido de forma incremental.
 
-**Sistema de Certificados**
-- Geração de certificados digitais para participantes e vencedores
+A prioridade inicial é construir uma base funcional que permita:
 
-**Busca e Filtros**
-- Busca avançada por tipo, tema, localização, data, nível de dificuldade
+1. usuários;
+2. empresas;
+3. eventos;
+4. inscrições;
+5. programação;
+6. hackathons;
+7. equipes;
+8. submissões;
+9. resultados;
+10. perfil público;
+11. emblemas e certificados.
 
----
-
-## 5. Público-Alvo
-
-**Participantes:** Desenvolvedores, designers, product managers, empreendedores e profissionais de tech com interesse em hackathons e eventos de networking.
-
-**Organizadores:** Empresas tech, startups, comunidades de desenvolvimento, universidades e institutos de tecnologia que desejam organizar hackathons.
-
----
-
-## 6. Diferenciais da Solução
-
-- Plataforma centralizada especialmente desenhada para hackathons
-- Interface intuitiva e otimizada para mobile
-- Acompanhamento em tempo real de etapas
-- Integração com ferramentas de desenvolvimento populares
-- Analytics detalhado para organizadores
-- Comunidade vibrante de makers e developers
-
----
-
-## Conclusão
-
-A Plataforma de Hackathons e Eventos de Tecnologia representa uma oportunidade significativa de impacto no ecossistema tech. Ao centralizar a experiência de descoberta, participação e organização de eventos, criamos valor para todos os stakeholders: participantes ganham acesso facilitado a oportunidades, empresas ganham ferramentas poderosas de gestão, e a comunidade tech se fortalece através de conexões.
-
-Com a combinação correta de produto, mercado e modelo de negócio, esta startup tem potencial para se tornar a plataforma de referência para hackathons no Brasil e além.
-
----
-
+Funcionalidades de carteira interna e pagamentos privados dentro do evento ficam planejadas para evolução futura.
